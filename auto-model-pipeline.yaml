@@ -1,3 +1,18 @@
+trigger:
+ - main 
+
+schedules: 
+
+ - cron: "0 0 * * *" 
+
+   displayName: Daily midnight build 
+
+   branches: 
+
+     include: 
+       - main 
+
+   always: true 
 
 parameters:
  - name: model_name
@@ -39,12 +54,12 @@ steps:
 
 
 
- - bash: |
-     echo Authenticate with Huggingface repository 
+#  - bash: |
+#      echo Authenticate with Huggingface repository 
 
-     huggingface-cli login --token $(hf_token)
+#      huggingface-cli login --token "$(hf_token)"
 
-   displayName: "Authentication to Huggingface repo" 
+#    displayName: "Authentication to Huggingface repo" 
 
  - bash: |
     pip list 
@@ -55,13 +70,24 @@ steps:
  #   nvidia-smi
  #  displayName: "dump nvidia-smi"
 
- - script: | 
+ - bash: |
 
-     python $(Build.SourcesDirectory)/llama_model_builder.py --model_name '${{ parameters.model_name }}' --output_dir '$(Build.BinariesDirectory)'
+     git clone https://github.com/apsonawane/turnkeyml-cuda.git
+     cd turnkeyml-cuda
+     conda create -n tk-llm python=3.10
+     conda activate tk-llm
+     pip install -e .[llm-oga-cuda]
 
-   displayName: "Convert Huggingface model to ONNX model"
+   displayName: "Download turnkeyml-llm to export to onnx and run benchmark tests"
      
    workingDirectory: $(Build.SourcesDirectory)
+
+ - bash: |
+    lemonade -i ${{ parameters.model_name }} --device cuda --dtype int4 llm-prompt -p "Hello, my thoughts are"
+
+    displayName: "Download turnkeyml-llm to export to onnx and run benchmark tests"
+
+    workingDirectory: $(Build.SourcesDirectory)
 
  - task: AzureCLI@2
    displayName: 'upload model to Blob Storage'

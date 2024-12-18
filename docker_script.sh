@@ -51,11 +51,11 @@ pip install -e .[llm-oga-cuda]
 echo "Installed turnkeyllm"
 
 echo "Running lemonade command"
-lemonade -i microsoft/Phi-3-mini-4k-instruct --cache-dir "/root/" oga-load --device cuda --dtype int4 llm-prompt -p "Hello, my thoughts are"
+lemonade -i microsoft/Phi-3.5-mini-instruct --cache-dir "/root/" oga-load --device cuda --dtype int4 llm-prompt -p "Hello, my thoughts are"
 
 # echo "Copying the model to ort_src"
-ls -la "/root/oga_models/microsoft_phi-3-mini-4k-instruct/"
+ls -la "/root/oga_models/microsoft_phi-3.5-mini-4k-instruct/"
 
-cp -r "/root/oga_models/microsoft_phi-3-mini-4k-instruct/" "/ort_src"
+cp -r "/root/oga_models/microsoft_phi-3.5-mini-4k-instruct/" "/ort_src"
 
 ls "/ort_src/"

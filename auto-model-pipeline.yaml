@@ -18,7 +18,7 @@ parameters:
  - name: model_name
    displayName: mode name on huggingface website
    type: string
-   default: microsoft/Phi-3-mini-4k-instruct
+   default: microsoft/Phi-3.5-mini-instruct
 
 pool: onnxruntime-Linux-GPU-T4
 steps:
@@ -100,4 +100,4 @@ steps:
        az account list
        az ml registry create --resource-group asonawane-dev-linux --file registry.yml
        az ml registry list
-       az ml data create --name phi-3-mini-4k-instruct-for-test-only --registry-name TestRegistryforModelPublish --version 1 --path './microsoft_phi-3-mini-4k-instruct' --description "phi-3-mini-4k-instruct-test-only from pipeline"
+       az ml data create --name phi-3.5-mini-4k-instruct-for-test-only --registry-name TestRegistryforModelPublish --version 1 --path './microsoft_phi-3.5-mini-4k-instruct' --description "phi-3.5-mini-4k-instruct-test-only from pipeline"

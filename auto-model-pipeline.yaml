@@ -98,4 +98,6 @@ steps:
        az extension add -n ml -y
        az extension list
        az account list
-       az ml data create --name phi-3-mini-4k-instruct-for-test-only --version 1 --path './microsoft_phi-3-mini-4k-instruct' --description "phi-3-mini-4k-instruct-test-only from pipeline" --resource-group asonawane-dev-linux --workspace-name Microsoft --skip-validation
+       az ml registry create --resource-group asonawane-dev-linux --file registry.yml
+       az ml registry list
+       az ml data create --name phi-3-mini-4k-instruct-for-test-only --registry-name TestRegistryforModelPublish --version 1 --path './microsoft_phi-3-mini-4k-instruct' --description "phi-3-mini-4k-instruct-test-only from pipeline"

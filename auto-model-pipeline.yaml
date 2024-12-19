@@ -61,6 +61,20 @@ steps:
 
    displayName: "Authentication to Huggingface repo" 
 
+ - bash: |
+    echo "Processing checkpoint"
+
+    checkpoint="${{ parameters.model_name }}"
+
+    # Replace "/" with "_" and convert to lowercase
+    formatted_checkpoint=$(echo "$checkpoint" | tr '/' '_' | tr '[:upper:]' '[:lower:]')
+
+    # Set the formatted checkpoint as an environment variable
+    echo "##vso[task.setvariable variable=formatted_checkpoint]$formatted_checkpoint"
+
+    echo "Formatted checkpoint: $formatted_checkpoint"
+   displayName: "Process checkpoint"
+
  - script: |
      docker run --gpus all --rm \
         --ipc=host \
@@ -96,9 +110,10 @@ steps:
      scriptType: bash
      inlineScript: |
        cd $(Build.BinariesDirectory)
+       echo "Formatted checkpoint: $formatted_checkpoint"
        az extension add -n ml -y
        az extension list
        az account list
        az ml registry create --resource-group asonawane-dev-linux --file registry.yml
        az ml registry list
-       az ml data create --name ${{ parameters.model_name }}-test-only --registry-name TestRegistryforModelPublish --version 1 --path '${{ parameters.model_name }}' --description "${{ parameters.model_name }} from pipeline"
+       az ml data create --name $formatted_checkpoint-test-only --registry-name TestRegistryforModelPublish --version 1 --path '$formatted_checkpoint' --description "$formatted_checkpoint from pipeline"

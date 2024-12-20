@@ -110,10 +110,8 @@ steps:
      scriptType: bash
      inlineScript: |
        cd $(Build.BinariesDirectory)
-       echo "Formatted checkpoint: $formatted_checkpoint"
+       echo "Formatted checkpoint: $(formatted_checkpoint)"
        az extension add -n ml -y
        az extension list
-       az account list
-       az ml registry create --resource-group asonawane-dev-linux --file registry.yml
-       az ml registry list
-       az ml data create --name $formatted_checkpoint-test-only --registry-name TestRegistryforModelPublish --version 1 --path '$formatted_checkpoint' --description "$formatted_checkpoint from pipeline"
+       ls $(Build.BinariesDirectory)/oga_models/
+       az ml data create --name "Test-model" --registry-name TestRegistryforModelPublish --version 1 --path '$(Build.BinariesDirectory)/oga_models/$(formatted_checkpoint)' --description "Test model from pipeline"

@@ -32,28 +32,6 @@ steps:
    displayName: install the necessary packages
    workingDirectory: $(Build.SourcesDirectory)
 
-#  - script: pip install --pre azure-cli --extra-index-url https://azurecliprod.blob.core.windows.net/edge
-#    displayName: 'upgrade azure cli'
-
-#  - script: az --version
-#    displayName: 'Show Azure CLI version'
-
-#  - script: |
-#       python -c "with open('hello.txt', 'w') as f:f.write('hello world')"
-#       azcopy cp --recursive "./hello.txt" 'https://sunghchostorageaccount.blob.core.windows.net/test'
-#       ls
-#    displayName: 'try azcopy upload to sun blob'
-
-
-#  - script: |
-#      az account list
-#      python -c "with open('hello-test.txt', 'w') as f:f.write('hello world')"
-#      azcopy cp --recursive "./hello-test.txt" 'https://sunghchostorageaccount.blob.core.windows.net/test'
-#      az ml data create --name testfile --version 1 --path './hello-test.txt' --registry-name model-publish-test --description "test file"
-#    displayName: "try upload to AzureML"
-
-
-
  - bash: |
      echo Authenticate with Huggingface repository 
 
@@ -68,11 +46,14 @@ steps:
 
     # Replace "/" with "_" and convert to lowercase
     formatted_checkpoint=$(echo "$checkpoint" | tr '/' '_' | tr '[:upper:]' '[:lower:]')
+    formatted_name=$(echo "$formatted_checkpoint" | tr '.' '_' | tr '[:upper:]' '[:lower:]')
 
     # Set the formatted checkpoint as an environment variable
     echo "##vso[task.setvariable variable=formatted_checkpoint]$formatted_checkpoint"
+    echo "##vso[task.setvariable variable=formatted_name]$formatted_name"
 
     echo "Formatted checkpoint: $formatted_checkpoint"
+    echo "Formatted name: $formatted_name"
    displayName: "Process checkpoint"
 
  - script: |
@@ -111,7 +92,8 @@ steps:
      inlineScript: |
        cd $(Build.BinariesDirectory)
        echo "Formatted checkpoint: $(formatted_checkpoint)"
+       echo "Formatted name: $(formatted_name)"
        az extension add -n ml -y
        az extension list
        ls $(Build.BinariesDirectory)/oga_models/
-       az ml data create --name "Test-model" --registry-name TestRegistryforModelPublish --version 1 --path '$(Build.BinariesDirectory)/oga_models/$(formatted_checkpoint)' --description "Test model from pipeline"
+       az ml data create --name "$(formatted_name)" --registry-name TestRegistryforModelPublish --version 1 --path '$(Build.BinariesDirectory)/oga_models/$(formatted_checkpoint)' --description "$(formatted_name) from pipeline"

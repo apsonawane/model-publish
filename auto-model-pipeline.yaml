@@ -20,7 +20,7 @@ parameters:
    type: string
    default: microsoft/Phi-3.5-mini-instruct
 
-pool: onnxruntime-Linux-GPU-T4
+pool: Onnxruntime-Linux-A10-24G
 steps:
  - task: UsePythonVersion@0
    inputs:
@@ -93,7 +93,13 @@ steps:
        cd $(Build.BinariesDirectory)
        echo "Formatted checkpoint: $(formatted_checkpoint)"
        echo "Formatted name: $(formatted_name)"
-       az extension add -n ml -y
+       echo "Install az extension"
+       az extension remove -n azure-cli-ml
+       az extension remove -n ml
+       az extension add --name ml
+       pip install azure-ai-ml==1.22.4
+       pip install marshmallow==3.23.2 --target /mnt/vss/_work/_temp/.azclitask/cliextensions/ml --upgrade
+       pip list
        az extension list
-       ls $(Build.BinariesDirectory)/oga_models/
-       az ml data create --name "$(formatted_name)" --registry-name TestRegistryforModelPublish --version 1 --path '$(Build.BinariesDirectory)/oga_models/$(formatted_checkpoint)' --description "$(formatted_name) from pipeline"
+       az ml data create --name "$(formatted_name)" --registry-name TestRegistryforModelPublish --version 0 --path '$(Build.BinariesDirectory)/oga_models/' --description "$(formatted_name) from pipeline" --debug
+      #  az ml data create --name "$(formatted_name)" --registry-name Genai-model-registry --version 0 --path '$(Build.BinariesDirectory)' --description "$(formatted_name) from pipeline"

@@ -97,9 +97,8 @@ steps:
        az extension remove -n azure-cli-ml
        az extension remove -n ml
        az extension add --name ml
-       pip install azure-ai-ml==1.22.4
        pip install marshmallow==3.23.2 --target /mnt/vss/_work/_temp/.azclitask/cliextensions/ml --upgrade
        pip list
        az extension list
-       az ml data create --name "$(formatted_name)" --registry-name TestRegistryforModelPublish --version 0 --path '$(Build.BinariesDirectory)/oga_models/' --description "$(formatted_name) from pipeline" --debug
+       az ml data create --name "$(formatted_name)_$(formatted_checkpoint)" --registry-name TestRegistryforModelPublish --version 1 --path "$(Build.BinariesDirectory)/oga_models" --description "$(formatted_name) from pipeline" --debug
       #  az ml data create --name "$(formatted_name)" --registry-name Genai-model-registry --version 0 --path '$(Build.BinariesDirectory)' --description "$(formatted_name) from pipeline"

@@ -5,7 +5,7 @@ optimum>=1.17.0
 protobuf==3.20.2
 torch
 # transformers optimizer fusions don't match in newer versions
-azure-ai-ml==1.22.4
+azure-ai-ml
 azure-identity
 azure-keyvault-secrets
 azureml-fsspec

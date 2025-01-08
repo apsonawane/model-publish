@@ -35,9 +35,6 @@ source /opt/conda/etc/profile.d/conda.sh
 conda activate tk-llm
 pip install -e .[llm-oga-cuda]
 
-# export HF_HOME="/build/oga_models/hf_version/"
-# echo "HF_HOME: $HF_HOME"
-
 huggingface-cli download $MODEL_NAME --local-dir /build/oga_models/hf_version/
 
 lemonade -i $MODEL_NAME --cache-dir "/build" oga-load --device cuda --dtype int4 accuracy-mmlu --tests management oga-bench

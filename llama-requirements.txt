@@ -10,4 +10,3 @@ azure-identity
 azure-keyvault-secrets
 azureml-fsspec
 huggingface_hub
-marshmallow==3.23.2

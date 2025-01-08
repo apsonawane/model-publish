@@ -40,4 +40,4 @@ pip install -e .[llm-oga-cuda]
 
 huggingface-cli download $MODEL_NAME --local-dir /build/oga_models/hf_version/
 
-lemonade -i $MODEL_NAME --cache-dir "/build" oga-load --device cuda --dtype int4 accuracy-mmlu --tests management
+lemonade -i $MODEL_NAME --cache-dir "/build" oga-load --device cuda --dtype int4 accuracy-mmlu --tests management oga-bench

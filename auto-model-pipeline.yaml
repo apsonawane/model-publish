@@ -100,5 +100,5 @@ steps:
        pip install marshmallow==3.23.2 --target /mnt/vss/_work/_temp/.azclitask/cliextensions/ml --upgrade
        pip list
        az extension list
-       az ml data create --name "$(formatted_name)_$(formatted_checkpoint)" --registry-name TestRegistryforModelPublish --version 1 --path "$(Build.BinariesDirectory)/oga_models" --description "$(formatted_name) from pipeline" --debug
-      #  az ml data create --name "$(formatted_name)" --registry-name Genai-model-registry --version 0 --path '$(Build.BinariesDirectory)' --description "$(formatted_name) from pipeline"
+       az ml data create --name "$(formatted_name)_hf_version" --registry-name TestRegistryforModelPublish --version 0 --path "$(Build.BinariesDirectory)/oga_models/hf_version" --description "$(formatted_name)_hf_version from pipeline"
+       az ml data create --name "$(formatted_name)_gpu" --registry-name TestRegistryforModelPublish --version 0 --path '$(Build.BinariesDirectory)/oga_models/microsoft_phi-3.5-mini-instruct/cuda' --description "$(formatted_name)_gpu from pipeline"
